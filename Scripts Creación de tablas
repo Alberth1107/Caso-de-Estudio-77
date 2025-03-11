@@ -1,0 +1,149 @@
+-- Crear la base de datos
+CREATE DATABASE joyeria_celestial;
+\c joyeria_celestial; -- Conectarse a la base de datos
+
+-- Tabla Clientes
+CREATE TABLE Clientes (
+  numero_cliente SERIAL PRIMARY KEY,
+  nombre_razon_social VARCHAR(100),
+  informacion_contacto TEXT,
+  historial_compras TEXT,
+  preferencias_diseno TEXT
+);
+
+-- Tabla Diseños
+CREATE TABLE Disenos (
+  codigo_diseno SERIAL PRIMARY KEY,
+  descripcion TEXT,
+  tipo_joya VARCHAR(50),
+  metal_principal VARCHAR(50),
+  gemas_utilizadas TEXT,
+  dimensiones VARCHAR(50),
+  peso_estimado NUMERIC,
+  bocetos TEXT,
+  renders_3D TEXT,
+  planos_tecnicos TEXT,
+  estado_diseno VARCHAR(50)
+);
+
+-- Tabla Metales
+CREATE TABLE Metales (
+  codigo_metal SERIAL PRIMARY KEY,
+  tipo VARCHAR(50),
+  pureza NUMERIC,
+  peso_stock NUMERIC,
+  precio_gramo NUMERIC
+);
+
+-- Tabla Gemas
+CREATE TABLE Gemas (
+  codigo_gema SERIAL PRIMARY KEY,
+  tipo VARCHAR(50),
+  talla VARCHAR(50),
+  color VARCHAR(50),
+  claridad VARCHAR(50),
+  quilates NUMERIC,
+  origen VARCHAR(50),
+  certificado_autenticidad TEXT,
+  precio_unitario NUMERIC
+);
+
+-- Tabla Proveedores
+CREATE TABLE Proveedores (
+  numero_proveedor SERIAL PRIMARY KEY,
+  nombre_razon_social VARCHAR(100),
+  tipo_materiales VARCHAR(50),
+  informacion_contacto TEXT,
+  certificaciones TEXT
+);
+
+-- Tabla Pedidos
+CREATE TABLE Pedidos (
+  numero_pedido SERIAL PRIMARY KEY,
+  cliente INT REFERENCES Clientes(numero_cliente),
+  tipo_pedido VARCHAR(50),
+  diseno_solicitado INT REFERENCES Disenos(codigo_diseno),
+  materiales_utilizados TEXT,
+  fecha_pedido DATE,
+  fecha_entrega DATE,
+  estado_pedido VARCHAR(50)
+);
+
+-- Tabla Producción
+CREATE TABLE Produccion (
+  orden_produccion SERIAL PRIMARY KEY,
+  pedido INT REFERENCES Pedidos(numero_pedido),
+  diseno INT REFERENCES Disenos(codigo_diseno),
+  materiales_utilizados TEXT,
+  fecha_inicio DATE,
+  fecha_fin DATE,
+  operarios_asignados TEXT,
+  etapas_produccion TEXT
+);
+
+-- Tabla Tasaciones
+CREATE TABLE Tasaciones (
+  joya INT REFERENCES Disenos(codigo_diseno),
+  fecha_tasacion DATE,
+  tasador VARCHAR(50),
+  valor_joya NUMERIC,
+  criterios_tasacion TEXT,
+  PRIMARY KEY (joya, fecha_tasacion)
+);
+
+-- Tabla Facturación
+CREATE TABLE Facturacion (
+  pedido_tasacion INT REFERENCES Pedidos(numero_pedido),
+  fecha_factura DATE,
+  importe NUMERIC,
+  estado_factura VARCHAR(50),
+  PRIMARY KEY (pedido_tasacion, fecha_factura)
+);
+
+-- Tabla Transacciones
+CREATE TABLE Transacciones (
+  id_transaccion SERIAL PRIMARY KEY,
+  fecha DATE,
+  tipo_transaccion VARCHAR(50),
+  importe NUMERIC,
+  estado_transaccion VARCHAR(50),
+  descripcion TEXT
+);
+
+-- Tabla Marketing
+CREATE TABLE Marketing (
+  campania SERIAL PRIMARY KEY,
+  presencia_redes_sociales TEXT
+);
+
+-- Tabla Comunicación
+CREATE TABLE Comunicacion (
+  id SERIAL PRIMARY KEY,
+  tipo_comunicacion VARCHAR(50),
+  mensaje TEXT,
+  destinatario TEXT
+);
+
+-- Tabla Informes y Estadísticas
+CREATE TABLE Informes (
+  tipo_informe VARCHAR(50),
+  contenido_informe TEXT,
+  PRIMARY KEY (tipo_informe)
+);
+
+-- Tabla de relación muchos a muchos para Metales y Diseños
+CREATE TABLE Diseno_Metal (
+  diseno_id INT REFERENCES Disenos(codigo_diseno),
+  metal_id INT REFERENCES Metales(codigo_metal),
+  PRIMARY KEY (diseno_id, metal_id)
+);
+
+-- Tabla de relación muchos a muchos para Gemas y Diseños
+CREATE TABLE Diseno_Gema (
+  diseno_id INT REFERENCES Disenos(codigo_diseno),
+  gema_id INT REFERENCES Gemas(codigo_gema),
+  PRIMARY KEY (diseno_id, gema_id)
+);
+
+-- Crear índice para mejorar el rendimiento de las consultas
+CREATE INDEX idx_cliente_nombre ON Clientes (nombre_razon_social);

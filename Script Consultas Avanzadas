@@ -1,0 +1,26 @@
+-- Consulta con INNER JOIN para combinar datos de clientes y pedidos
+SELECT c.nombre_razon_social, p.fecha_pedido, p.estado_pedido
+FROM Clientes c
+INNER JOIN Pedidos p ON c.numero_cliente = p.cliente;
+
+-- Subconsulta para encontrar los 10 clientes que han realizado más compras en el último año
+SELECT nombre_razon_social, total_compras
+FROM (
+  SELECT c.nombre_razon_social, SUM(ped.importe) AS total_compras
+  FROM Clientes c
+  INNER JOIN Facturacion ped ON c.numero_cliente = ped.pedido_tasacion
+  WHERE ped.fecha_factura > CURRENT_DATE - INTERVAL '1 year'
+  GROUP BY c.nombre_razon_social
+  ORDER BY total_compras DESC
+  LIMIT 10
+) AS top_clientes;
+
+-- Creación de una vista materializada para consultas repetitivas
+CREATE MATERIALIZED VIEW vista_pedidos_resumen AS
+SELECT p.numero_pedido, c.nombre_razon_social AS cliente_nombre, p.fecha_pedido, p.estado_pedido
+FROM Pedidos p
+JOIN Clientes c ON p.cliente = c.numero_cliente
+WITH DATA;
+
+-- Actualizar la vista materializada periódicamente
+REFRESH MATERIALIZED VIEW vista_pedidos_resumen;

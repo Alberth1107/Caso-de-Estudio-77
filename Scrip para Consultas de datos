@@ -1,0 +1,14 @@
+-- Consultar todos los clientes
+SELECT * FROM Clientes;
+
+-- Consultar todos los diseños en desarrollo
+SELECT * FROM Disenos WHERE estado_diseno = 'En desarrollo';
+
+-- Consultar todos los pedidos ordenados por fecha de entrega
+SELECT * FROM Pedidos ORDER BY fecha_entrega DESC;
+
+-- Contar la cantidad de gemas por tipo
+SELECT tipo, COUNT(*) AS total_gemas FROM Gemas GROUP BY tipo;
+
+-- Calcular el promedio de quilates de gemas por tipo
+SELECT tipo, AVG(quilates) AS promedio_quilates FROM Gemas GROUP BY tipo HAVING AVG(quilates) > 1;

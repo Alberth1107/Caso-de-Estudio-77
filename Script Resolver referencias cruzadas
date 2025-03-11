@@ -1,0 +1,22 @@
+-- Eliminar registros en la tabla "Facturación" que referencian el pedido
+DELETE FROM Facturacion WHERE pedido_tasacion IN (1, 2);
+
+-- Eliminar registros en la tabla "Producción" que referencian el pedido
+DELETE FROM Produccion WHERE pedido IN (1, 2);
+
+-- Eliminar registros en la tabla "Pedidos" que referencian el cliente
+DELETE FROM Pedidos WHERE cliente = 1;
+
+-- Eliminar el cliente
+DELETE FROM Clientes WHERE numero_cliente = 1;
+
+-- Eliminar diseños que están en desarrollo desde hace más de dos años
+ALTER TABLE Disenos ADD COLUMN fecha_creacion DATE DEFAULT CURRENT_DATE;
+
+DELETE FROM Disenos WHERE estado_diseno = 'En desarrollo' AND fecha_creacion < CURRENT_DATE - INTERVAL '2 years';
+
+-- Eliminar metales sin stock
+DELETE FROM Metales WHERE peso_stock = 0;
+
+-- Eliminar gemas sin stock
+DELETE FROM Gemas WHERE precio_unitario = 0;

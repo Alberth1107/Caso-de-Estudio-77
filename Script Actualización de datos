@@ -1,0 +1,19 @@
+-- Script de Actualización de Datos
+
+-- Actualizar la información de contacto de un cliente
+UPDATE Clientes SET informacion_contacto = 'nueva_direccion@example.com' WHERE numero_cliente = 2;
+
+-- Actualizar el estado de un pedido a 'Entregado'
+UPDATE Pedidos SET estado_pedido = 'Entregado' WHERE numero_pedido = 2;
+
+-- Actualizar el precio por gramo de un metal
+UPDATE Metales SET precio_gramo = 60.0 WHERE tipo = 'Oro';
+
+-- Actualizar el estado de un diseño a 'Aprobado'
+UPDATE Disenos SET estado_diseno = 'Aprobado' WHERE codigo_diseno = 3;
+
+-- Actualizar el valor de tasación de una joya
+UPDATE Tasaciones SET valor_joya = 2000.0 WHERE joya = 1 AND fecha_tasacion = '2023-03-06';
+
+-- Actualizar la presencia en redes sociales para una campaña de marketing
+UPDATE Marketing SET presencia_redes_sociales = 'Facebook, Instagram, Twitter, LinkedIn' WHERE campania = 1;

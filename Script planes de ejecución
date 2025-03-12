@@ -1,0 +1,1 @@
+EXPLAIN ANALYZE SELECT * FROM Pedidos WHERE estado_pedido = 'Pendiente';

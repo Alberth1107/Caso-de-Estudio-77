@@ -1,0 +1,5 @@
+CREATE MATERIALIZED VIEW vista_pedidos_resumen AS
+SELECT p.numero_pedido, c.nombre_razon_social AS cliente_nombre, p.fecha_pedido, p.estado_pedido
+FROM Pedidos p
+JOIN Clientes c ON p.cliente = c.numero_cliente
+WITH DATA;
